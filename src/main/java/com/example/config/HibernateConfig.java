@@ -32,7 +32,6 @@ public class HibernateConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         emf.setJpaVendorAdapter(vendorAdapter);
@@ -40,7 +39,6 @@ public class HibernateConfig {
         emf.setJpaProperties(hibernateProperties());
         emf.setPackagesToScan("com.example.model");
         emf.afterPropertiesSet();
-
         return emf;
     }
 

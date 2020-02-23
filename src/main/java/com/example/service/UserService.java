@@ -1,54 +1,57 @@
 package com.example.service;
 
-import com.example.dao.UserHibernateDAO;
+import com.example.dao.CustomerDAO;
 import com.example.model.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.List;
 
+
 @Service
-public class UserService {
+public class UserService implements CustomerService<User>{
 
-    private final UserHibernateDAO userHibernateDAO;
+    private final CustomerDAO userHibernateDAO;
 
-    @Autowired
-    public UserService(UserHibernateDAO userHibernateDAO) {
+    public UserService(CustomerDAO userHibernateDAO) {
         this.userHibernateDAO = userHibernateDAO;
     }
 
-    /*получить всех пользователей*/
+    @Override
     public List<User> selectAllUsers() {
         return userHibernateDAO.selectAllUsers();
     }
 
-    /*изменение пользователя*/
+    @Override
     @Transactional
-    public void updateUser(long id, String name, String lastname, String email) {
-        userHibernateDAO.updateUser(id, name, lastname, email);
+    public void updateUser(Long id, String name, String email) {
+        userHibernateDAO.updateUser(id, name, email);
     }
 
-    /*создать пользователя*/
+    @Override
     @Transactional
     public void creatUser(User user) {
         userHibernateDAO.creatUser(user);
     }
 
-    /*удалить пользователя*/
+    @Override
     @Transactional
-    public void deleteUser(long id) {
+    public void deleteUser(Long id) {
         userHibernateDAO.deleteUser(id);
     }
 
-    /*получить пользователя по Id*/
-    public User selectUserId(long id) {
-        return userHibernateDAO.selectUserId(id);
+    @Override
+    public User getUserById(Long id) {
+        return (User) userHibernateDAO.getUserById(id);
     }
 
-    /*TODO проверка клиента*/
-    public User verifyUser(String name, String password) {
-        return userHibernateDAO.verifyUser(name, password);
+    @Override
+    public User getUserByPassword(String password) {
+        return (User) userHibernateDAO.getUserByPassword(password);
     }
+
 }
+
+

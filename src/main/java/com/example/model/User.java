@@ -1,44 +1,53 @@
 package com.example.model;
 
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
-    private String name;
-    @Column(name = "lastname")
-    private String lastname;
+    private String username;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "owner_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> role = new HashSet<>();
+
     public User() {
     }
 
-    public User(String name, String lastname, String email) {
-        this.name = name;
-        this.lastname = lastname;
+    public User(String name, String email) {
+        this.username = name;
         this.email = email;
     }
 
-    public User(String name, String lastname, String email, String password) {
-        this.name = name;
-        this.lastname = lastname;
+    public User(String name, String email, String password) {
+        this.username = name;
         this.email = email;
         this.password = password;
 
     }
 
-    public User(long id, String name, String lastname, String email, String password) {
+    public User(Long id, String name, String email, String password) {
         this.id = id;
-        this.name = name;
-        this.lastname = lastname;
+        this.username = name;
         this.email = email;
         this.password = password;
     }
@@ -51,20 +60,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -75,11 +76,16 @@ public class User {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public Set<Role> getRole() {
+        return role;
     }
+
 }
