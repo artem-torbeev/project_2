@@ -25,12 +25,11 @@ public class LoginController {
 
     @PostMapping("/login")
     public ModelAndView loginUser(HttpServletRequest request) {
-        String name = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = request.getParameter("username");
         ModelAndView modelAndView = new ModelAndView();
-        if (userService.getUserByPassword(password) != null) {
+        if (userService.getUserByUsername(username) != null) {
             modelAndView.setViewName("user");
-            modelAndView.addObject("name", name);
+            modelAndView.addObject("name", username);
             return modelAndView;
         } else {
             return new ModelAndView("error");

@@ -48,8 +48,8 @@ public class UserService implements CustomerService<User>{
     }
 
     @Override
-    public User getUserByPassword(String password) {
-        return (User) userHibernateDAO.getUserByPassword(password);
+    public User getUserByUsername(String username) {
+        return (User) userHibernateDAO.getUserByUsername(username);
     }
 
 }

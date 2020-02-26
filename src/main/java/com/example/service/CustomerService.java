@@ -15,5 +15,5 @@ public interface CustomerService<T> {
 
     T getUserById(Long id);
 
-    T getUserByPassword(String password);
+    T getUserByUsername(String username);
 }

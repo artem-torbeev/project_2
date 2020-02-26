@@ -25,6 +25,7 @@
     <tr>
         <th>Имя</th>
         <th>Email</th>
+        <th>Role</th>
         <th>Action</th>
     </tr>
 
@@ -32,6 +33,9 @@
     <tr>
         <td><i><c:out value="${user.username}"/></i></td>
         <td><i><c:out value="${user.email}"/></i></td>
+        <td>
+            <c:forEach items="${user.role}" var="role">${role.role} </c:forEach>
+        </td>
 
         <td>
             <a href="${pageContext.request.contextPath}/admin/edit/<c:out value='${user.id}' />">Edit</a>

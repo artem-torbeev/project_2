@@ -25,29 +25,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/user").permitAll()
+                //Доступ разрешен всем пользователей
+                .antMatchers("/resources/**", "/user", "/login").permitAll()
+                //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+                //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
+                //Настройка для входа в систему своя страница
                 .formLogin()
                 .loginPage("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
+                //Перенарпавление на страницу user после успешного входа
+                .defaultSuccessUrl("/user")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll();
-        http.csrf().disable();
+
 
     }
 }
