@@ -6,5 +6,6 @@
 </head>
 <body>
 <h1>У вас нет прав доступа <c:out value="${name}"/>!</h1>
+
 </body>
 </html>

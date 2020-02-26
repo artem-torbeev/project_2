@@ -13,8 +13,9 @@
         Invalid username and password.
     </p>
 </c:if>
+
 <div>
-    <form method="POST" action="login">
+    <form method="POST" action="/login">
         <h2>Вход в систему</h2>
         <div>
             <input name="username" type="text" placeholder="Username" />
@@ -24,9 +25,9 @@
         </div>
     </form>
 </div>
-<input type="hidden"
-       name="${_csrf.parameterName}"
-       value="${_csrf.token}"/>
+<%--<input type="hidden"--%>
+<%--       name="${_csrf.parameterName}"--%>
+<%--       value="${_csrf.token}"/>--%>
 
 </body>
 </html>

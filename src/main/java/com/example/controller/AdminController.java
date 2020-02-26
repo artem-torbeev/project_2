@@ -32,11 +32,9 @@ public class AdminController {
     @GetMapping("/admin/edit/{id}")
     public ModelAndView getUserToEdit(@PathVariable Long id) {
         User user = (User) userService.getUserById(id);
-//        Set<Role> roleSet = user.getRole();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("edit");
         modelAndView.addObject("user", user);
-//        modelAndView.addObject("roleSet", roleSet);
         return modelAndView;
     }
 
