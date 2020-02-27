@@ -1,23 +1,25 @@
 package com.example.service;
 
-import com.example.dao.CustomerDAO;
+import com.example.dao.CustomerDao;
 import com.example.model.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 
 
 @Service
-public class UserService implements CustomerService<User>{
+public class UserService implements CustomerService<User> {
 
-    private final CustomerDAO userHibernateDAO;
+    private final CustomerDao userHibernateDAO;
 
-    public UserService(CustomerDAO userHibernateDAO) {
+    @Autowired
+    public UserService(CustomerDao userHibernateDAO) {
         this.userHibernateDAO = userHibernateDAO;
     }
+
 
     @Override
     public List<User> selectAllUsers() {
@@ -53,5 +55,4 @@ public class UserService implements CustomerService<User>{
     }
 
 }
-
 

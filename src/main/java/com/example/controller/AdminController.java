@@ -66,3 +66,4 @@ public class AdminController {
         return new ModelAndView( "redirect:/admin");
     }
 }
+

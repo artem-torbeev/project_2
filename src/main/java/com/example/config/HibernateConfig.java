@@ -3,6 +3,7 @@ package com.example.config;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class HibernateConfig {
 
     private final Environment environment;
 
+    @Autowired
     public HibernateConfig(Environment environment) {
         this.environment = environment;
     }

@@ -1,7 +1,6 @@
 package com.example.config;
 
-import com.example.service.CustomAccessDeniedHandler;
-import com.example.service.CustomUserDetailsService;
+import com.example.service.CustomerUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final CustomerUserDetailsService userDetailsService;
 
-    public WebSecurityConfig(CustomUserDetailsService userDetailsService) {
+    @Autowired
+    public WebSecurityConfig(CustomerUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -36,34 +35,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                //Доступ разрешен всем пользователей
-                .antMatchers("/user").permitAll()
-                //Доступ только для пользователей с ролью Администратор
-//                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
-                .and()
-                //Настройка для входа в систему своя страница
-                .formLogin()
-                .loginPage("/login")
-                //Перенарпавление на страницу user после успешного входа
-//                .defaultSuccessUrl("/user")
-                .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-                .and()
-                .exceptionHandling().accessDeniedPage("/accessDenied.jsp");
-//                .and()
-//                .logout()
-//                .permitAll();
-        http.csrf().disable();
-    }
 
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
-        return new CustomAccessDeniedHandler();
+        http.csrf()
+                .disable();
+        http.authorizeRequests()
+                .antMatchers("/register", "/home", "/login").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+        http.formLogin()
+                .loginPage("/login")
+                .and()
+                .exceptionHandling().accessDeniedPage("/access_denied");
+        http.logout()
+                .logoutUrl("/logout")
+                // указываем URL при удачном логауте
+                .logoutSuccessUrl("/")
+                // делаем не валидной текущую сессию
+                .invalidateHttpSession(true)
+                .deleteCookies ("JSESSIONID");
     }
 }

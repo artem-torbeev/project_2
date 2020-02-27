@@ -2,7 +2,6 @@ package com.example.dao;
 
 import com.example.model.Role;
 import com.example.model.User;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -10,13 +9,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import java.util.List;
 
-
-
 @Repository
-public class UserHibernateDAO implements CustomerDAO<User> {
+public class UserHibernateDAO implements CustomerDao<User> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -33,17 +29,6 @@ public class UserHibernateDAO implements CustomerDAO<User> {
         User user = entityManager.find(User.class, id);
         user.setUsername(name);
         user.setEmail(email);
-    }
-
-    @Override
-    public void creatUser(User user) {
-        String hql = "from Role r where r.id = 1";
-        TypedQuery<Role> query = entityManager.createQuery(hql, Role.class);
-        List<Role> listRoles = query.getResultList();
-        Role role = listRoles.get(0);
-        user.getRole().add(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        entityManager.persist(user);
     }
 
     @Override
@@ -64,6 +49,19 @@ public class UserHibernateDAO implements CustomerDAO<User> {
         query.setParameter("username", username);
         List<User> userList = query.getResultList();
         return userList.isEmpty() ? null : userList.get(0);
+    }
+
+   @Override
+    public void creatUser(User user) {
+        String hql = "from Role r where r.id = 1";
+        TypedQuery<Role> query = entityManager.createQuery(hql, Role.class);
+        List<Role> listRoles = query.getResultList();
+        Role role = listRoles.get(0);
+        user.getRole().add(role);
+        user.setUsername(user.getUsername());
+        user.setEmail(user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        entityManager.persist(user);
     }
 
 }
